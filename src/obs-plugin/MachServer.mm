@@ -7,7 +7,7 @@
 
 #import "MachServer.h"
 #import <Foundation/Foundation.h>
-#include <obs-module.h>
+//#include <obs-module.h>
 #include "MachProtocol.h"
 #include "Defines.generated.h"
 
@@ -16,6 +16,7 @@
 @property NSMutableSet *clientPorts;
 @property NSRunLoop *runLoop;
 @end
+
 
 
 @implementation MachServer
@@ -27,8 +28,9 @@
     return self;
 }
 
+
 - (void)dealloc {
-    blog(LOG_DEBUG, "tearing down MachServer");
+    NSLog(@"tearing down MachServer");
     [self.runLoop removePort:self.port forMode:NSDefaultRunLoopMode];
     [self.port invalidate];
     self.port.delegate = nil;
@@ -36,7 +38,7 @@
 
 - (void)run {
     if (self.port != nil) {
-        blog(LOG_DEBUG, "mach server already running!");
+        NSLog(@"mach server already running!");
         return;
     }
 
@@ -52,7 +54,7 @@
     #pragma clang diagnostic pop
     if (self.port == nil) {
         // This probably means another instance is running.
-        blog(LOG_ERROR, "Unable to open mach server port.");
+        NSLog(@"Unable to open mach server port.");
         return;
     }
 
@@ -61,19 +63,19 @@
     self.runLoop = [NSRunLoop currentRunLoop];
     [self.runLoop addPort:self.port forMode:NSDefaultRunLoopMode];
 
-    blog(LOG_DEBUG, "mach server running!");
+    NSLog(@"mach server running!");
 }
 
 - (void)handlePortMessage:(NSPortMessage *)message {
     switch (message.msgid) {
         case MachMsgIdConnect:
             if (message.sendPort != nil) {
-                blog(LOG_DEBUG, "mach server received connect message from port %d!", ((NSMachPort *)message.sendPort).machPort);
+                NSLog(@"mach server received connect message from port %d!", ((NSMachPort *)message.sendPort).machPort);
                 [self.clientPorts addObject:message.sendPort];
             }
             break;
         default:
-            blog(LOG_ERROR, "Unexpected mach message ID %u", (unsigned)message.msgid);
+            NSLog(@"Unexpected mach message ID %u", (unsigned)message.msgid);
             break;
     }
 }
@@ -90,11 +92,11 @@
             NSPortMessage *message = [[NSPortMessage alloc] initWithSendPort:port receivePort:nil components:components];
             message.msgid = msgId;
             if (![message sendBeforeDate:[NSDate dateWithTimeIntervalSinceNow:1.0]]) {
-                blog(LOG_DEBUG, "failed to send message to %d, removing it from the clients!", ((NSMachPort *)port).machPort);
+                NSLog(@"failed to send message to %d, removing it from the clients!", ((NSMachPort *)port).machPort);
                 [removedPorts addObject:port];
             }
         } @catch (NSException *exception) {
-            blog(LOG_DEBUG, "failed to send message (exception) to %d, removing it from the clients!", ((NSMachPort *)port).machPort);
+            NSLog(@"failed to send message (exception) to %d, removing it from the clients!", ((NSMachPort *)port).machPort);
             [removedPorts addObject:port];
         }
     }
@@ -127,8 +129,9 @@
     }
 }
 
+
 - (void)stop {
-    blog(LOG_DEBUG, "sending stop message to %lu clients", self.clientPorts.count);
+    NSLog(@"sending stop message to %lu clients", self.clientPorts.count);
     [self sendMessageToClientsWithMsgId:MachMsgIdStop components:nil];
 }
 

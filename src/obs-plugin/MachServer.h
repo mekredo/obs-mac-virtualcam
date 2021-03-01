@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 
+extern "C" {
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MachServer : NSObject
@@ -23,3 +24,4 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
+}
