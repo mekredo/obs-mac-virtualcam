@@ -5,7 +5,7 @@
 //  Created by John Boiles  on 5/5/20.
 //
 
-#define MACH_SERVICE_NAME "com.johnboiles.obs-mac-virtualcam.server"
+#define MACH_SERVICE_NAME "psycam"
 
 typedef enum {
     //! Initial connect message sent from the client to the server to initate a connection

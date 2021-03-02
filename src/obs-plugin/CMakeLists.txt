@@ -1,7 +1,5 @@
 project(obs-plugin)
 
-#find_package(Libobs REQUIRED)
-
 find_library(AVFOUNDATION AVFoundation)
 find_library(COCOA Cocoa)
 find_library(COREFOUNDATION CoreFoundation)
@@ -29,10 +27,6 @@ include_directories(${AVFOUNDATION}
                     ${COREMEDIAIO}
                     ${COCOA}
                     ${IOSURFACE}
-                    #${LIBOBS_INCLUDE_DIR}
-                    #"${LIBOBS_INCLUDE_DIR}/../UI/obs-frontend-api"
-                    #${Qt5Core_INCLUDES}
-                    #${Qt5Widgets_INCLUDES}
                     ./
                     ../common)
 
@@ -56,10 +50,6 @@ target_link_libraries(obs-plugin
 	${COREMEDIAIO}
 	${IOSURFACE}
 	${IOKIT}
-	#${LIBOBS_LIB}
-	#${OBS_FRONTEND_LIB}
-	#Qt5::Core
-	#Qt5::Widgets
     )
 
 set_target_properties(obs-plugin PROPERTIES

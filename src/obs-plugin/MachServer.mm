@@ -64,6 +64,7 @@
     [self.runLoop addPort:self.port forMode:NSDefaultRunLoopMode];
 
     NSLog(@"mach server running!");
+    NSLog(@"mach server name : %@", @MACH_SERVICE_NAME);
 }
 
 - (void)handlePortMessage:(NSPortMessage *)message {
